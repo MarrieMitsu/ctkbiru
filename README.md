@@ -31,7 +31,7 @@ $ ctkbiru add ./example.txt
 Generate the blueprint
 
 ```shell
-$ ctkbiru gen example -p ./path/to/target
+$ ctkbiru gen example --name my-project --path ./path/to/target
 ```
 
 ## Notes

@@ -74,11 +74,10 @@ impl Blueprint {
         }
         
         for i in depth_level.into()..bytes.len() {
-            filtered_bytes.push(bytes[i]);
-
             if i == (bytes.len() - 1) && bytes[i] == (47 as u8) {
                 pattern_type = BlueprintType::Dir;
-                filtered_bytes.pop();
+            } else {
+                filtered_bytes.push(bytes[i]);
             }
             
         }
@@ -208,6 +207,10 @@ impl Show {
 struct Add {
     #[clap(value_parser)]
     file: Option<PathBuf>,
+
+    /// Optional blueprint name
+    #[clap(short, long, value_parser)]
+    name: Option<String>,
 }
 
 impl Add {
@@ -228,7 +231,13 @@ impl Add {
                     fs::create_dir(&home_path).context("Something wrong!")?;
                 }
 
-                home_path.push(&blueprint);
+                let name = if let Some(val) = &self.name {
+                    format!("{val}.txt")
+                } else {
+                    blueprint
+                };
+
+                home_path.push(name);
 
                 if let Ok(_) = read_and_write_to_file(input_path, &home_path) {
                     println!("Blueprint added!");
@@ -286,12 +295,16 @@ struct Gen {
     #[clap(value_parser)]
     blueprint: Option<String>,
 
+    /// Optional name for generated 
+    /// blueprint
+    #[clap(short, long, value_parser)]
+    name: Option<String>,
+
     /// Specify target path, default
     /// current working directory
     #[clap(short, long, value_parser)]
     path: Option<PathBuf>,
 }
-
 
 impl Gen {
     pub fn result(&self) -> Result<()> {
@@ -312,7 +325,13 @@ impl Gen {
                     println!("No blueprints found!");
                 } else {
                     if let Ok(f) = File::open(&home_path) {
-                        target_path.push(blueprint);
+                        let name = if let Some(val) = &self.name {
+                            val
+                        } else {
+                            blueprint
+                        };
+
+                        target_path.push(name);
 
                         fs::create_dir(&target_path).context("Something wrong!")?;
                         let buf_reader = BufReader::new(f);
