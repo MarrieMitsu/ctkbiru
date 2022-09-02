@@ -125,7 +125,6 @@ impl List {
         let home_path = home_path()?;
 
         if !home_path.exists() {
-            fs::create_dir(&home_path).context("Something wrong!")?;
             println!("List blueprint:\n\nBlueprint\n----");
         } else {
             println!("List blueprint:\n\nBlueprint\n----");
@@ -172,7 +171,6 @@ impl Show {
             let mut home_path = home_path()?;
 
             if !home_path.exists() {
-                fs::create_dir(&home_path).context("Something wrong!")?;
                 println!("No blueprints found!");
             } else {
                 home_path.push(blueprint);
@@ -266,7 +264,6 @@ impl Rm {
             let mut home_path = home_path()?;
 
             if !home_path.exists() {
-                fs::create_dir(&home_path).context("Something wrong!")?;
                 println!("No blueprints found!");
             } else {
                 home_path.push(blueprint);
@@ -336,10 +333,10 @@ impl Gen {
                         fs::create_dir(&target_path).context("Something wrong!")?;
                         let buf_reader = BufReader::new(f);
 
-                        match self.generate_blueprint(buf_reader, target_path) {
+                        match self.generate_blueprint(buf_reader, target_path.to_owned()) {
                             Ok(_) => println!("Finish generate blueprint!"),
                             Err(err) => {
-                                fs::remove_file(&target_path)?;
+                                fs::remove_dir_all(&target_path)?;
                                 return Err(err);
                             },
                         }
@@ -353,7 +350,7 @@ impl Gen {
         Ok(())
     }
 
-    fn generate_blueprint(&self, buffer: BufReader<File>, path: &mut PathBuf) -> Result<()> {
+    fn generate_blueprint(&self, buffer: BufReader<File>, mut path: PathBuf) -> Result<()> {
         let mut depth_level: usize = 0;
         let mut segments: Vec<String> = vec![];
 

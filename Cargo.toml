@@ -1,7 +1,7 @@
 [package]
 name = "ctkbiru"
 description = "Simple command-line program to generate directory tree structure from a blueprint"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["MarrieMitsu"]
 edition = "2021"
 readme = "./README.md"
