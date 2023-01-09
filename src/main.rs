@@ -292,13 +292,14 @@ struct Gen {
     #[clap(value_parser)]
     blueprint: Option<String>,
 
-    /// Optional name for generated 
-    /// blueprint
+    /// Optional name for parent directory of generated 
+    /// blueprint. By default it uses current working directory
+    /// or target path by checking if it's empty
     #[clap(short, long, value_parser)]
     name: Option<String>,
 
-    /// Specify target path, default
-    /// current working directory
+    /// Specify target path, default current working 
+    /// directory
     #[clap(short, long, value_parser)]
     path: Option<PathBuf>,
 }
@@ -322,15 +323,21 @@ impl Gen {
                     println!("No blueprints found!");
                 } else {
                     if let Ok(f) = File::open(&home_path) {
-                        let name = if let Some(val) = &self.name {
-                            val
+                        let is_name_empty = if let Some(val) = &self.name {
+                            target_path.push(val);
+                            fs::create_dir(&target_path).context("Something wrong!")?;
+                            false
                         } else {
-                            blueprint
+                            true
                         };
 
-                        target_path.push(name);
+                        let is_target_path_empty = target_path.read_dir()?.next().is_none();
 
-                        fs::create_dir(&target_path).context("Something wrong!")?;
+                        if is_name_empty && !is_target_path_empty {
+                            println!("Directory must be empty!");
+                            return Ok(());
+                        }
+
                         let buf_reader = BufReader::new(f);
 
                         match self.generate_blueprint(buf_reader, target_path.to_owned()) {
