@@ -1,12 +1,22 @@
 # ctkbiru
 
-Simple command-line program to generate directory tree structure from a blueprint
+Simple command-line program to generate directory tree structure from a blueprint, part of my personal daily workflow utility.
+
+`blueprint` simply means template in `txt` format.
+
+## Installation
+
+You need rust toolchain to build it yourself
+
+```shell
+cargo install --git https://github.com/MarrieMitsu/ctkbiru
+```
 
 ## Usage
 
-Define a tree structure blueprint file
+Define a tree structure blueprint file in `txt` format, you can also see the [blueprints](./blueprints) which contains list of my personal blueprint example.
 
-`example.txt` :
+`my-blueprint.txt` :
 
 ```text
 assets/
@@ -25,18 +35,16 @@ README.txt
 Register the blueprint
 
 ```shell
-$ ctkbiru add ./example.txt
+ctkbiru add ./my-blueprint.txt
 ```
+
+Be aware registering do not check whether the file contains any forbidden **printable ASCII characters**, **Non-printable characters**, **Reserved file names** and **Other rules** respective to your operating system. Instead it will produce an error when you try to generate the blueprint.
 
 Generate the blueprint
 
 ```shell
-$ ctkbiru gen example --name my-project --path ./path/to/target
+ctkbiru gen my-blueprint --name my-project --path ./path/to/target
 ```
-
-## Notes
-
-I can not guarantee this program will run seamlessly, because I made this program only to meet my daily needs.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

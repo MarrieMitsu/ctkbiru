@@ -1,0 +1,17 @@
+Animation/
+ client/
+ user/
+Digital-Art/
+ client/
+ user/
+Graphic-Design/
+ client/
+ user/
+Dev/
+ client/
+ user/
+  lab/
+  project/
+Files/
+ documents/
+ images/

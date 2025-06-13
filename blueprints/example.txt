@@ -1,0 +1,11 @@
+assets/
+ images/
+ fonts/
+  A/
+   LICENSE.txt
+  B/
+   LICENSE.txt
+src/
+ this-is-a-dir/
+ this-is-a-file
+README.txt

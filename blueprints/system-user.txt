@@ -1,0 +1,12 @@
+Archive/
+Audio/
+Education/
+Files/
+Film/
+Games/
+Literature/
+ books/
+ papers/
+ specs/
+Picture/
+Videos/
